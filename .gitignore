@@ -12,7 +12,11 @@
 # Maven
 log/
 target/
+Xades.iml
 
 # vscode
 .vscode/*
-src/main/resources/signed-ETDA-invoice.xml
+src/main/resources/*.xml
+
+# Jetbrain
+.idea
