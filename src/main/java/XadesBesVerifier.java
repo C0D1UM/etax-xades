@@ -51,6 +51,7 @@ public class XadesBesVerifier {
 	
 	public boolean verifyBes(byte[] fileBytes, String storeType, String storePath, String storePassword, String storeDir)
 			throws Exception {
+		System.out.println("==============\tVerify\t==============");
 
 		Collection<X509Certificate> certChainList;
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -127,9 +128,13 @@ public class XadesBesVerifier {
 				}
 			}
 		} catch (Exception e) {
+			System.out.println("==============\tResult\t==============");
+			System.out.println("INVALID");
 			return false;
 		}
 
+		System.out.println("==============\tResult\t==============");
+		System.out.println("VALID");
 		return true;
 	}
 	
