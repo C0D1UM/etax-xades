@@ -49,7 +49,7 @@ public class XadesBesVerifier {
 
 	private static CertificateFactory cf = null;
 	
-	public void verifyBes(byte[] fileBytes, String storeType, String storePath, String storePassword, String storeDir)
+	public boolean verifyBes(byte[] fileBytes, String storeType, String storePath, String storePassword, String storeDir)
 			throws Exception {
 
 		Collection<X509Certificate> certChainList;
@@ -103,28 +103,34 @@ public class XadesBesVerifier {
 		XadesVerifier verifier = profile.newVerifier();
 
 		/**/
-		XAdESVerificationResult r = verifier.verify(sigElem, null);
+		try {
+			XAdESVerificationResult r = verifier.verify(sigElem, null);
 
-		System.out.println("Signature form: " + r.getSignatureForm());
-		System.out.println("Algorithm URI: " + r.getSignatureAlgorithmUri());
-		System.out.println("Signed objects: " + r.getSignedDataObjects().size());
-		System.out.println("Qualifying properties: " + r.getQualifyingProperties().all().size());
+			System.out.println("Signature form: " + r.getSignatureForm());
+			System.out.println("Algorithm URI: " + r.getSignatureAlgorithmUri());
+			System.out.println("Signed objects: " + r.getSignedDataObjects().size());
+			System.out.println("Qualifying properties: " + r.getQualifyingProperties().all().size());
 
-		for (QualifyingProperty qp : r.getQualifyingProperties().all()) {
-			if ("SigningCertificate".equals(qp.getName())) {
-				Collection<X509Certificate> certs = ((SigningCertificateProperty) qp).getsigningCertificateChain();
-				certs.forEach((cert) -> {
-					System.out.println(cert.getSubjectDN());
-				});
-			} else if ("SigningTime".equals(qp.getName())) {
-				System.out.println(
-						qp.getName() + ": " + ((SigningTimeProperty) qp).getSigningTime().getTime().toString());
-			} else if ("SignatureTimeStamp".equals(qp.getName())) {
-				System.out.println(qp.getName() + ": " + ((SignatureTimeStampProperty) qp).getTime().toString());
-			} else {
-				System.out.println("QP name: " + qp.getName());
+			for (QualifyingProperty qp : r.getQualifyingProperties().all()) {
+				if ("SigningCertificate".equals(qp.getName())) {
+					Collection<X509Certificate> certs = ((SigningCertificateProperty) qp).getsigningCertificateChain();
+					certs.forEach((cert) -> {
+						System.out.println(cert.getSubjectDN());
+					});
+				} else if ("SigningTime".equals(qp.getName())) {
+					System.out.println(
+							qp.getName() + ": " + ((SigningTimeProperty) qp).getSigningTime().getTime().toString());
+				} else if ("SignatureTimeStamp".equals(qp.getName())) {
+					System.out.println(qp.getName() + ": " + ((SignatureTimeStampProperty) qp).getTime().toString());
+				} else {
+					System.out.println("QP name: " + qp.getName());
+				}
 			}
+		} catch (Exception e) {
+			return false;
 		}
+
+		return true;
 	}
 	
 	private ArrayList<X509Certificate> getCertChain(X509Certificate cert) {
