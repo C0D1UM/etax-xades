@@ -49,14 +49,14 @@ public class XadesBesVerifier {
 
 	private static CertificateFactory cf = null;
 	
-	public void verifyBes(String filePath, String storeType, String storePath, String storePassword, String storeDir)
+	public void verifyBes(byte[] fileBytes, String storeType, String storePath, String storePassword, String storeDir)
 			throws Exception {
 
 		Collection<X509Certificate> certChainList;
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document doc = builder.parse(new FileInputStream(filePath));
+		Document doc = builder.parse(new ByteArrayInputStream(fileBytes));
 
 		NodeList nl = doc.getElementsByTagNameNS(javax.xml.crypto.dsig.XMLSignature.XMLNS, "Signature");
 		Element sigElem = (Element) nl.item(0);

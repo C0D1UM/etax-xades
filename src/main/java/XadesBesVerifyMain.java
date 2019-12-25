@@ -2,6 +2,8 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 //import org.apache.log4j.Logger;
 //import org.apache.log4j.BasicConfigurator;
@@ -30,7 +32,10 @@ public class XadesBesVerifyMain {
 			System.out.println("==============\tVerify\t==============");
 			loadConfig(CONFIG_FILE_PATH);
 
-			verifier.verifyBes(verifyInput, trustStoreType, trustStorePath, trustStorePassword, certStoreDir);
+			// Read XML file
+			byte[] fileContent = Files.readAllBytes(Paths.get(verifyInput));
+
+			verifier.verifyBes(fileContent, trustStoreType, trustStorePath, trustStorePassword, certStoreDir);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
